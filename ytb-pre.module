@@ -1,11 +1,3 @@
-#!name=YouTube Premium 2025 - Nightmarket
-#!desc=Chặn quảng cáo YouTube + Music | Hỗ trợ PiP, phụ đề & phát nền | Yêu cầu bật bảo vệ QUIC
-#!tag=Chặn quảng cáo, YouTube, Music, PiP
-# 👤 Author: : @Nightmarket Server , @Maasea
-# 💬 Discord: https://discord.gg/juY9tw5AJY  
-# 🚀 Released by: Nightmarket Server  
-
-
 [Rule]
 AND,((DOMAIN-SUFFIX,googlevideo.com), (PROTOCOL,UDP)),REJECT
 AND,((DOMAIN,youtubei.googleapis.com), (PROTOCOL,UDP)),REJECT
