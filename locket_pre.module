@@ -1,0 +1,12 @@
+[MITM]
+hostname = %APPEND% api.revenuecat.com, api.locketcamera.com, *.locketcamera.com
+
+[Script]
+# 1. Bắt gói tin xác nhận gói đăng ký RevenueCat
+revenuecat = type=http-response, pattern=^https:\/\/api\.revenuecat\.com\/.+\/(receipts$|subscribers\/[^/]+$), script-path=https://raw.githubusercontent.com/longnguyn0411-commits/Ytb-pre/refs/heads/main/locket_pre.js, requires-body=true, max-size=-1, timeout=60
+
+# 2. Xóa Header request RevenueCat
+deleteHeader = type=http-request, pattern=^https:\/\/api\.revenuecat\.com\/.+\/(receipts|subscribers), script-path=https://raw.githubusercontent.com/dhungx/modules-shadowrocket/refs/heads/main/js/locket/deleteHeader.js, timeout=60
+
+# 3. Bắt gói tin API cấu hình ứng dụng Locket (Fix lỗi video 30s & upload)
+locket_config = type=http-response, pattern=^https?:\/\/api\.locketcamera\.com\/.*, script-path=https://raw.githubusercontent.com/longnguyn0411-commits/Ytb-pre/refs/heads/main/locket_pre.js, requires-body=true, max-size=-1, timeout=60
