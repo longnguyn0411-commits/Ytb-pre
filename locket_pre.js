@@ -1,40 +1,46 @@
-// Script Locket Advance Bypass
-const url = $request.url;
-var body = $response.body;
-
-if (body) {
-  try {
-    // Nếu là gói tin JSON thông thường
-    var obj = JSON.parse(body);
-
-    // Xử lý RevenueCat
-    if (obj.subscriber) {
-      obj.subscriber.subscriptions["locket_gold_year"] = {
-        is_sandbox: false,
-        ownership_type: "PURCHASED",
-        period_type: "normal",
-        expires_date: "2099-12-31T23:59:59Z",
-        purchase_date: "2024-01-01T00:00:00Z",
-        store: "app_store"
-      };
-      obj.subscriber.entitlements["Gold"] = {
-        expires_date: "2099-12-31T23:59:59Z",
-        product_identifier: "locket_gold_year",
-        purchase_date: "2024-01-01T00:00:00Z"
-      };
-    }
-
-    // Ep tat ca bien boolean/number lien quan den Video sang trang thai mo
-    const forceEnable = (target) => {
-      if (typeof target === 'object' && target !== null) {
-        for (let key in target) {
-          if (key.includes('video') || key.includes('duration') || key.includes('upload') || key.includes('gold')) {
-            if (typeof target[key] === 'boolean') target[key] = true;
-            if (typeof target[key] === 'number' && target[key] < 30) target[key] = 30;
-          }
-          if (typeof target[key] === 'object') forceEnable(target[key]);
-        }
-      }
+// ========= ID ========= //
+const mapping = {
+  'Locket': ['Gold']
+};
+// =========   Phần cố định  ========= // 
+var ua = $request.headers["User-Agent"] || $request.headers["user-agent"],
+  obj = JSON.parse($response.body);
+obj.Attention = "Chúc mừng bạn! Vui lòng không bán hoặc chia sẻ cho người khác!";
+var NMS = {
+      auto_resume_date: null,
+      display_name: "locket_1600_1y",
+      is_sandbox: true,
+      ownership_type: "PURCHASED",
+      billing_issues_detected_at: null,
+      management_url: "https://apps.apple.com/account/subscriptions",
+      period_type: "normal",
+      price: {
+          "amount": 399000.0,
+          "currency": "VND"
+      },
+      expires_date: "9999-01-09T10:10:14Z",
+      grace_period_expires_date: null,
+      refunded_at: null,
+      unsubscribe_detected_at: null,
+      original_purchase_date: "2027-11-25T10:10:15Z",
+      purchase_date: "2027-11-25T10:10:14Z",
+      store: "app_store",
+      store_transaction_id: "2000001108724193",
+  },
+  locketGold = {
+      grace_period_expires_date: null,
+      purchase_date: "2027-11-25T10:10:14Z",
+      product_identifier: "locket_1600_1y",
+      expires_date: "9999-01-09T10:10:14Z"
+  };
+const match = Object.keys(mapping).find(e => ua.includes(e));
+if (match) {
+  let [e, s] = mapping[match];
+  s ? (locketGold.product_identifier = s, obj.subscriber.subscriptions[s] = NMS) : obj.subscriber.subscriptions["locket_1600_1y"] = NMS, obj.subscriber.entitlements[e] = locketGold
+} else obj.subscriber.subscriptions["locket_1600_1y"] = NMS, obj.subscriber.entitlements.pro = locketGold;
+$done({
+  body: JSON.stringify(obj)
+});      }
     };
     forceEnable(obj);
 
